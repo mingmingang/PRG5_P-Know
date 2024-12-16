@@ -11,105 +11,47 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Services\Encryptor;
 use App\Http\Controllers\Controller; 
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
+    public function login(Request $request)
     {
-        if (Cookie::has('activeUser')) {
-            return redirect('/');
-        }
-
-        return view('auth.login');
-    }
-
-    public function handleLogin(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|max:50',
-            'password' => 'required',
+        // Tangkap inputan user dari form
+        $input = $request->input('username'); // contoh inputan user
+        
+        // Memanggil stored procedure dengan parameter
+        $result = DB::select('EXEC sso_getAuthenticationKMS ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?', [
+            $input, null, null, null, null, null, null, null, null, null, 
+            null, null, null, null, null, null, null, null, null, null, 
+            null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null,
+            null, null, null, null, null, null, null, null, null, null
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        try {
-            $response = Http::post(config('services.api_link') . 'Utilities/Login', [
-                'username' => $request->username,
-                'password' => $request->password,
-            ]);
-
-            if ($response->failed() || $response->json() === 'ERROR') {
-                return back()->withErrors(['message' => 'Nama akun atau kata sandi salah.'])->withInput();
-            }
-
-            $data = $response->json();
-
-            if ($data[0]['Status'] === 'LOGIN FAILED') {
-                return back()->withErrors(['message' => 'Nama akun atau kata sandi salah.'])->withInput();
-            }
-
-            session(['listRole' => $data]);
-            return view('auth.role-selection', ['roles' => $data]);
-        } catch (\Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
-            return back()->withErrors(['message' => 'Terjadi kesalahan. Silakan coba lagi.'])->withInput();
-        }
-    }
-
-    public function handleRoleSelection(Request $request)
-    {
-        $request->validate([
-            'role' => 'required',
-        ]);
-
-        try {
-            $ipAddress = $request->ip();
-
-            $response = Http::post(config('services.api_link') . 'Utilities/CreateJWTToken', [
-                'username' => session('listRole')[0]['NamaPengguna'],
-                'role' => $request->role,
-                'nama' => session('listRole')[0]['Nama'],
-            ]);
-
-            if ($response->failed() || $response->json() === 'ERROR') {
-                return back()->withErrors(['message' => 'Gagal mendapatkan token autentikasi.']);
-            }
-
-            $token = $response->json()['Token'];
-
-            $userInfo = [
-                'username' => session('listRole')[0]['NamaPengguna'],
-                'role' => $request->role,
-                'nama' => session('listRole')[0]['Nama'],
-                'peran' => $request->input('roleName'),
-                'lastLogin' => null,
+        // Periksa hasil query
+        if (!empty($result)) {
+            $roles = [];
+        foreach ($result as $role) {
+            $roles[] = [
+                'id' => $role->RoleID,  // or whatever fields the role data has
+                'name' => $role->Role,
             ];
+        }
 
-            $encryptedUserInfo = Encryptor::encrypt(json_encode($userInfo));
+        // Store roles in the session
+        session(['roles' => $roles]);
 
-            Cookie::queue('activeUser', $encryptedUserInfo, 1440); // Expire in 1 day
+        // Set flag in session to show role selection modal
+        session(['showRoleSelectionModal' => true]);
 
-            switch ($userInfo['peran']) {
-                case 'PIC P-KNOW':
-                case 'PIC Kelompok Keahlian':
-                case 'Tenaga Pendidik':
-                    return redirect('/beranda_utama');
-                case 'Program Studi':
-                    return redirect('/beranda_prodi');
-                case 'Tenaga Kependidikan':
-                    return redirect('/beranda_tenaga_kependidikan');
-                case 'Mahasiswa':
-                    return redirect('/beranda_mahasiswa');
-                default:
-                    return redirect('/');
-            }
-        } catch (\Exception $e) {
-            Log::error('Role selection error: ' . $e->getMessage());
-            return back()->withErrors(['message' => 'Terjadi kesalahan. Silakan coba lagi.']);
+        //return redirect()->route('login');
+        return redirect()->route('beranda_utama');
+        } else {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Login gagal, data tidak ditemukan'
+            ]);
         }
     }
 }

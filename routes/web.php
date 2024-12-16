@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
 use App\Http\Controllers\BerandaProdiController;
+use App\Http\Controllers\AuthController;
 
 
 
@@ -18,20 +19,25 @@ use App\Http\Controllers\BerandaProdiController;
 
 // Route::get('/login', [LoginController::class, 'showLoginForm']);
 // Route::post('/login', [LoginController::class, 'handleLogin']);
-Route::post('/select-role', [LoginController::class, 'handleRoleSelection']);
-
-Route::get('/Login', function () {
+Route::get('/', function(){
     return view('page/login/index');
 });
 
+Route::post('/select-role', [LoginController::class, 'handleRoleSelection']);
 
+Route::get('/login', function () {
+    return view('page/login/index'); // This returns the login form view
+});
 
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 // ----------------------------------------------------  Return View  ----------------------------------------------------
 // ----------- Beranda View -----------  
 Route::get('/beranda_utama', function () {
-    return view('Backbone/BerandaUtama');
-});
+    return view('Backbone.BerandaUtama');
+})->name('beranda_utama');
+
+
 Route::get('/beranda_pengguna', function () {
     return view('Backbone/BerandaPengguna');
 });

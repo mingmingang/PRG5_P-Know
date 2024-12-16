@@ -3,6 +3,10 @@
     --secondary-color: rgba(8,84,159,1);
 }
 
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 /* Beranda Utama CSS */
 .sec1 {
     background-image: url(../assets/bgBeranda.png);
@@ -46,6 +50,7 @@
 }
 
 .ucapan button {
+    font-family: 'Poppins', sans-serif;
     margin-top: 2rem; /* Changed to rem */
     border: none;
     background-color: white;

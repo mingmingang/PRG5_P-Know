@@ -1,6 +1,6 @@
-<div class="header">
+<div class="header" style="height: 60px;">
     <!-- Logo Section -->
-    <div class="logo">
+    <div class="logo" style="margin: 20px 50px;">
         <img src="{{ asset('assets/logoAstratech.png') }}" alt="Logo ASTRAtech" title="Logo ASTRAtech" width="170px" height="40px">
     </div>
 

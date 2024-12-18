@@ -5,8 +5,7 @@ use App\Http\Controllers\LoginController;
 
 use App\Http\Controllers\BerandaProdiController;
 use App\Http\Controllers\AuthController;
-
-
+use App\Http\Controllers\HeaderController;
 
 // Route::get('/page/login/Index', [LoginController::class, 'showLogin'])->name('login.show'); // Menampilkan halaman login
 
@@ -61,3 +60,7 @@ Route::get('/pickk', function () {
 Route::get('/tenaga_kependidikan', function () {
     return view('page/master-tenaga-kependidikan/index');
 });
+
+Route::get('/header', [HeaderController::class, 'index']);
+Route::get('/logout', [HeaderController::class, 'logout']);
+Route::get('/notifications', [HeaderController::class, 'notifications']);

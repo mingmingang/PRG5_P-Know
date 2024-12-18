@@ -27,3 +27,11 @@
     </div>
 </section>
 @include('backbone.footer')
+
+<script>
+        // Kirim data roles dari Laravel ke JavaScript
+        const roles = @json($roles);
+
+        // Tampilkan data roles di console
+        console.log('Data Roles:', roles);
+    </script>

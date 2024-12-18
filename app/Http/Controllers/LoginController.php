@@ -46,7 +46,7 @@ class LoginController extends Controller
         session(['showRoleSelectionModal' => true]);
 
         //return redirect()->route('login');
-        return redirect()->route('beranda_utama');
+        return view('Backbone.BerandaUtama')->with('roles', $roles);
         } else {
             return response()->json([
                 'status' => 'failed',

@@ -11,7 +11,7 @@ body {
 .sec1 {
     background-image: url(../assets/bgBeranda.png);
     display: flex;
-    width: 100vw;
+    width: 100%;
     padding-right: 5%; /* Changed to percentage for responsiveness */
     height: 100vh;
     background-size: cover;
@@ -73,10 +73,12 @@ body {
 }
 
 .imgDatang {
-    padding-top: 40vh; /* Changed to viewport height */
+    padding-top: 20vh; /* Changed to viewport height */
     display: flex;
-    width: 27%;
-    height:60%;
+    width: 47%;
+    margin-left: 100px;
+    margin-top: 30vh;
+    height:70%;
 }
 
 .ceweVR, .cowoTop {

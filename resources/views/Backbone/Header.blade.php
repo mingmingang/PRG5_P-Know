@@ -13,6 +13,9 @@
         <div class="logo">
             <img src="{{ asset('assets/logoAstratech.png') }}" alt="Logo ASTRAtech" title="Logo ASTRAtech" width="170px" height="40px">
         </div>
+        <div class="">
+            
+        </div>
     </nav>
 </body>
 </html>

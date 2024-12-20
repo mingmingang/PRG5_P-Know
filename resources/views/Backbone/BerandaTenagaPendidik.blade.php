@@ -1,4 +1,4 @@
-@include('backbone.headerpicpknow', [
+@include('backbone.headertenagapendidik', [
     'showMenu' => false, // Menyembunyikan menu pada halaman login
     'userProfile' => ['name' => 'User', 'role' => 'Guest', 'lastLogin' => ''],
     'menuItems' => [],

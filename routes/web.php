@@ -6,18 +6,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\BerandaProdiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HeaderController;
+use App\Http\Controllers\KKController;
 
-// Route::get('/page/login/Index', [LoginController::class, 'showLogin'])->name('login.show'); // Menampilkan halaman login
-
-// Route::post('/login', [LoginController::class, 'handleLogin'])->name('login.handle'); // Menangani form login
-
-// Route::post('/logout', function () {
-//     Auth::logout(); // Melakukan logout
-//     return redirect('/login'); // Redirect ke halaman login
-// })->name('logout');
-
-// Route::get('/login', [LoginController::class, 'showLoginForm']);
-// Route::post('/login', [LoginController::class, 'handleLogin']);
 Route::get('/', function(){
     return view('page/login/index');
 });
@@ -29,12 +19,22 @@ Route::get('/login', function () {
 });
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'clearRoleSession'])->name('clearRoleSession');
 
 // ----------------------------------------------------  Return View  ----------------------------------------------------
 // ----------- Beranda View -----------  
+Route::get('/dashboard/PIC P-KNOW', function () {
+    return view('Backbone/BerandaUtama');
+});
+
+
+
 Route::get('/beranda_utama', function () {
     return view('Backbone.BerandaUtama');
 })->name('beranda_utama');
+
+Route::get('/kelola_kk/PIC P-KNOW', [KKController::class, 'getTempDataKK'])->name('kelola_kk');
+Route::get('/kelola_kk/PIC P-KNOW', [KKController::class, 'getTempDataKK'])->name('kelola_kk.getTempDataKK');
 
 
 Route::get('/beranda_pengguna', function () {
@@ -42,15 +42,21 @@ Route::get('/beranda_pengguna', function () {
 });
 
 
-// Route::get('/beranda_prodi', [BerandaProdiController::class, 'index']);
-
 Route::get('/daftar_pustaka', function () {
     return view('page/DaftarPustaka/index');
 });
 
-// Route::get('/daftar_pustaka/store', function () {
-//     return view('page/DaftarPustaka/KelolaDaftarPustaka/TambahDaftarPustaka');
-// });
+
+// Route Dashboard
+Route::get('/dashboard/PIC P-KNOW', function () {
+    return view('Backbone/BerandaUtama');
+});
+
+// Tenaga Pendidik
+Route::get('/dashboard/Tenaga Pendidik', function () {
+    return view('Backbone/BerandaTenagaPendidik');
+});
+
 
 
 Route::get('/pickk', function () {
